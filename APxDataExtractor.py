@@ -1054,7 +1054,10 @@ class APxContainer(Form):
         self.bSelectFile.Enabled = self.appendCheckbox.Checked
 
     
-if __name__ == "__main__":
+def main():
     Application.EnableVisualStyles()
     form = APxContainer()
     Application.Run(form)
+
+if __name__ == "__main__":
+    main()
