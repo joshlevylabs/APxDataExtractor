@@ -7,12 +7,14 @@ measurements, and results.
 """
 
 import clr
-from openpyxl import Workbook
+from openpyxl import Workbook, load_workbook
 import logging
 import os
 import copy
 import tkinter as tk
 from tkinter import filedialog
+import datetime
+
 
 # Add the necessary references
 clr.AddReference("System")  # Add reference to the System assembly
@@ -664,8 +666,14 @@ class APxContainer(Form):
         if not self.checkedData:
             logging.warning("No checked data to export.")
             return
-        # Call the export_to_excel method with the checked data
-        self.export_to_excel(self.checkedData, self.unitInput.Text.strip())
+
+        # If "Append to" is checked and a file is selected, then append to that file
+        if self.appendCheckbox.Checked and hasattr(self, "selectedAppendFilePath"):
+            self.append_to_existing_excel(self.selectedAppendFilePath, self.checkedData, self.unitInput.Text.strip())
+        else:
+            # Call the export_to_excel method with the checked data
+            self.export_to_excel(self.checkedData, self.unitInput.Text.strip())
+
 
     @staticmethod
     def sanitize_sheet_name(name):
@@ -702,10 +710,7 @@ class APxContainer(Form):
         try:
             # unit_no = self.unitInput.Text.strip()
             if unit_descriptor:  # Incorporate the descriptor into the filename
-                file_name = f"{unit_descriptor}_{unit_descriptor}.xlsx" if unit_descriptor else f"{unit_descriptor}.xlsx"
-            else:
-                file_name = f"{unit_descriptor}_exported_data.xlsx" if unit_descriptor else "exported_data.xlsx"
-            
+                file_name = f"{unit_descriptor}.xlsx" if unit_descriptor else "exported_data.xlsx"
 
             for sp in checked_signal_paths:
                 for measurement in sp["measurements"]:
@@ -1040,6 +1045,107 @@ class APxContainer(Form):
                 self.selectedAppendFilePath = filepath
                 self.bSelectFile.Text = filename
                 self.bSelectFile.BackColor = Color.Green
+
+    def append_to_existing_excel(self, filename, checked_signal_paths, unit_descriptor):
+        print(f"Attempting to load: {filename}")  
+        try:
+            wb = load_workbook(filename)
+        except Exception as e:
+            logging.error(f"Failed to load the workbook '{filename}'. Error: {e}")
+            return
+        
+        unit_no = self.unitInput.Text.strip()
+        
+        try:
+            for sp_idx, sp in enumerate(checked_signal_paths):
+                logging.info(f"Processing Signal Path {sp_idx+1}: {sp['name']}")
+                for meas_idx, measurement in enumerate(sp["measurements"]):
+                    logging.info(f"\tMeasurement {meas_idx+1}: {measurement['name']}")
+                    for res_idx, result in enumerate(measurement["results"]):
+                        logging.info(f"\t\tResult {res_idx+1}: {result['name']}")
+                        sheet_title = f"{self.abbreviate_name(sp['name'])}_{self.abbreviate_name(measurement['name'])}_{self.abbreviate_name(result['name'])}"
+                        
+                        if sheet_title not in wb.sheetnames:
+                            ws = wb.create_sheet(title=sheet_title)
+                            ws.append([f'Signal Path: {sp["name"]}'])
+                            ws.append([f'Measurement: {measurement["name"]}'])
+                            ws.append([f'Result: {result["name"]}'])
+                        else:
+                            ws = wb[sheet_title]
+                        
+                        first_empty_row = len(ws["A"]) + 1
+                        
+                        # Handle xy values
+                        if 'xValues' in result['data'] and 'yValues' in result['data']:
+                            logging.info(f"Keys present in result['data']: {list(result['data'].keys())}")
+
+                            xValues = result['data']['xValues']
+                            yValues = result['data']['yValues']
+
+                            new_sheet_created = False  # Initialize a flag to track if a new sheet is created
+
+                            # Append data to existing sheet if possible
+                            if sheet_title in wb.sheetnames:
+                                ws = wb[sheet_title]
+                                                        
+                                existing_x_values = [cell.value for cell in ws['A'][3:ws.max_row]]
+                                if existing_x_values == xValues:
+                                    logging.info("Existing X values match the new data. Appending to existing sheet.")
+                                    first_empty_col = ws.max_column + 1
+                                    for row_idx, yValue in enumerate(yValues):
+                                        ws.cell(row=row_idx + 4, column=first_empty_col, value=yValue)
+                                    logging.info(f"Data successfully appended to {sheet_title} for XY values.")
+                                else:
+                                    logging.warning("Existing X values do not match the new data.")
+                                    new_sheet_created = True  # Set the flag to True if a new sheet is created
+
+                            # Force create a new sheet with a timestamp to store the new data only if not already created
+                            current_time_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+                            new_sheet_title = f"{sheet_title}_{current_time_str}"
+                            if not new_sheet_created:
+                                new_ws = wb.create_sheet(title=new_sheet_title)
+                                new_ws.append([f'Signal Path: {sp["name"]}'])
+                                new_ws.append([f'Measurement: {measurement["name"]}'])
+                                new_ws.append([f'Result: {result["name"]}'])
+                                new_ws.append(xValues)
+                                new_ws.append(yValues)
+                                                
+                                logging.info(f"Data added to new sheet: {new_sheet_title}")
+                            
+                            logging.info(f"Data added to new sheet: {new_sheet_title}")
+                        if 'meterValues' in result['data']:
+                            meter_sheet_title = f"{self.abbreviate_name(sp['name'])}_{self.abbreviate_name(measurement['name'])}_{self.abbreviate_name(result['name'])}"
+                            
+                            if meter_sheet_title not in wb.sheetnames:
+                                meter_ws = wb.create_sheet(title=meter_sheet_title)
+                                meter_ws.append([f'Signal Path: {sp["name"]}'])
+                                meter_ws.append([f'Measurement: {measurement["name"]}'])
+                                meter_ws.append([f'Result: {result["name"]}'])
+                                meter_ws.append([unit_descriptor])
+                            else:
+                                meter_ws = wb[meter_sheet_title]
+                            
+                            last_column = meter_ws.max_column + 1
+                            meter_ws.cell(row=4, column=last_column, value=unit_no)  # Header is placed at row 4
+                            
+                            for idx, val in enumerate(result['data']['meterValues'], start=5): # Data starts from row 5
+                                meter_ws.cell(row=idx, column=last_column, value=val)
+
+                        # Handle Raw Text Results
+                        if 'rawTextResults' in result['data']:
+                            rawTextResults = result['data']['rawTextResults']
+                            for item in rawTextResults:
+                                ws.append([item]) 
+
+        except Exception as e:
+            logging.error(f"Error occurred while processing Signal Path {sp_idx+1}: {sp['name']}, Measurement {meas_idx+1}: {measurement['name']}, Result {res_idx+1}: {result['name']}. Error: {e}")
+            return
+                        
+        try:
+            wb.save(filename)
+            logging.info(f"Data successfully appended to {filename}")
+        except Exception as e:
+            logging.error(f"Error occurred while saving the workbook. Error: {e}")
 
 
     def toggle_select_pass_file_button(self, sender, args):
