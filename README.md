@@ -1,4 +1,4 @@
-AP Sequence Runner - README.txt
+AP Sequence Data Extractor - README.txt
 ======================================================================
 
 ABOUT THE PROGRAM:
