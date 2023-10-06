@@ -10,9 +10,23 @@ AP Sequence Runner is a comprehensive software tool designed to automate, enhanc
 INSTALLING FROM WHEEL FILE:
 ---------------------------
 1. If you haven't already, ensure you have Python and pip installed on your machine.
-2. Navigate to the directory containing the `.whl` file.
-3. Install the package using pip: pip install APSequenceRunner-0.1-py3-none-any.whl
-4. After installation, all the required dependencies for AP Sequence Runner will be installed, and you can run the script as usual.
+
+2. Before running the APSequenceRunner script, make sure the following libraries and references are correctly set up on your system:
+
+   a. .NET Framework: 
+      Ensure the .NET framework is installed. This is necessary for the clr library and System references.
+      
+   b. Audio Precision API:
+      Make sure the Audio Precision software is installed and the API is accessible. Specifically, the following references are required:
+         - AudioPrecision.API2.dll
+         - AudioPrecision.API.dll
+      By default, they might be located at: C:\Program Files\Audio Precision\APx500 X.X\API\ (replace X.X with your version number).
+
+3. Navigate to the directory containing the `.whl` file.
+4. Install the package using pip: pip install APSequenceRunner-0.1-py3-none-any.whl
+5. After installation, all the required dependencies for AP Sequence Runner will be installed, and you can run the script as usual.
+Note: It's essential that the mentioned libraries and references are available and correctly set up. If you encounter any issues, please consult the respective documentation or support channels for .NET Framework and Audio Precision.
+
 
 KEY FEATURES:
 -------------
@@ -71,7 +85,7 @@ LICENSE:
 
 CREDITS:
 --------
-Developed by [Joshua Levy at Josh Levy Labs].
+Developed by Joshua Levy at Josh Levy Labs.
 
 CONTACT:
 --------

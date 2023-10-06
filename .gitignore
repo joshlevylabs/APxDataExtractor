@@ -1,0 +1,4 @@
+# Ignoring excel files to upload into github repo
+*.xlsx
+
+__pycache__/

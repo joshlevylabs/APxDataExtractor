@@ -57,7 +57,7 @@ class APxContainer(Form):
 
         # Unit Input TextBox and Label
         self.unitLabel = Label()
-        self.unitLabel.Text = "Unit Number"
+        self.unitLabel.Text = "Serial Number"
         self.unitLabel.Location = Point(20, 20)
         self.unitLabel.Size = Size(80, 20)
         self.unitLabel.Font = Font(self.unitLabel.Font, FontStyle.Bold)
@@ -94,7 +94,7 @@ class APxContainer(Form):
         # "Select File" Button
         self.bSelectFile = Button()
         self.bSelectFile.Text = "Select File"
-        self.bSelectFile.Location = Point(120, 150)  # Adjust the location accordingly
+        self.bSelectFile.Location = Point(140, 150)  # Adjust the location accordingly
         self.bSelectFile.Size = Size(100, 30)
         self.bSelectFile.Click += lambda sender, args: self.select_file(sender, args, "All")
         self.bSelectFile.Enabled = False  # Initially greyed-out
@@ -218,7 +218,7 @@ class APxContainer(Form):
 
         # Number Of Items Labels
         self.totalItemsLabel = Label()
-        self.totalItemsLabel.Text = "Number Of Items: N/A"
+        self.totalItemsLabel.Text = "Total # of Tests: N/A"
         self.totalItemsLabel.Location = Point(10, 50)
         self.totalItemsLabel.Size = Size(200, 20)
         self.statisticsGroupBox.Controls.Add(self.totalItemsLabel)
@@ -665,7 +665,7 @@ class APxContainer(Form):
             logging.warning("No checked data to export.")
             return
         # Call the export_to_excel method with the checked data
-        self.export_to_excel(self.checkedData)
+        self.export_to_excel(self.checkedData, self.unitInput.Text.strip())
 
     @staticmethod
     def sanitize_sheet_name(name):
@@ -694,17 +694,17 @@ class APxContainer(Form):
             count += 1
         return sheet_name
 
-    def export_to_excel(self, checked_signal_paths, unit_descriptor, args=None):
+    def export_to_excel(self, checked_signal_paths, unit_descriptor=None, args=None):
         wb = Workbook()
         ws = wb.active
         has_created_sheet = False
 
         try:
-            unit_no = self.unitInput.Text.strip()
+            # unit_no = self.unitInput.Text.strip()
             if unit_descriptor:  # Incorporate the descriptor into the filename
-                file_name = f"{unit_no}_{unit_descriptor}.xlsx" if unit_no else f"{unit_descriptor}.xlsx"
+                file_name = f"{unit_descriptor}_{unit_descriptor}.xlsx" if unit_descriptor else f"{unit_descriptor}.xlsx"
             else:
-                file_name = f"{unit_no}_exported_data.xlsx" if unit_no else "exported_data.xlsx"
+                file_name = f"{unit_descriptor}_exported_data.xlsx" if unit_descriptor else "exported_data.xlsx"
             
 
             for sp in checked_signal_paths:
@@ -722,7 +722,8 @@ class APxContainer(Form):
                             ws.append([f'Signal Path: {sp["name"]}'])
                             ws.append([f'Measurement: {measurement["name"]}'])
                             ws.append([f'Result: {result["name"]}'])
-                            ws.append(["X Values"] + [f"Y Values CH{idx+1}" for idx in range(len(result['data']['yValues']))])
+                            # Modified header to include Serial Number for Y Values
+                            ws.append(["X Values"] + [f"{unit_descriptor} Ch{idx+1}" for idx in range(len(result['data']['yValues']))])
                             if "ch2" in result['name'].lower():
                                 continue  # skip the ch2 result to avoid duplicating data
                         
@@ -751,7 +752,7 @@ class APxContainer(Form):
                             meter_ws.append([f'Signal Path: {sp["name"]}'])
                             meter_ws.append([f'Measurement: {measurement["name"]}'])
                             meter_ws.append([f'Result: {result["name"]}'])
-                            meter_ws.append(["Meter Values"])
+                            meter_ws.append([unit_descriptor])
                             
                             meterValues = result['data']['meterValues']
                             for val in meterValues:
@@ -797,7 +798,7 @@ class APxContainer(Form):
                         for m in sp['measurements'] 
                         for r in m['results'] 
                         if not (self.is_result_failed(sp['name'], m['name'], r['name']) or self.result_error(sp['name'], m['name'], r['name']))]
-        self.export_to_excel(passing_data, "UnitName_PASS")
+        self.export_to_excel(passing_data, self.unitInput.Text.strip() + "_PASS")
 
 
     def export_fail(self, sender=None, args=None):
@@ -806,7 +807,7 @@ class APxContainer(Form):
                     for m in sp['measurements'] 
                     for r in m['results'] 
                     if self.is_result_failed(sp['name'], m['name'], r['name'])]
-        self.export_to_excel(failed_data, "UnitName_FAIL")
+        self.export_to_excel(failed_data, self.unitInput.Text.strip() + "_FAIL")
 
     def export_error(self, sender=None, args=None):
         error_data = [sp
@@ -814,7 +815,7 @@ class APxContainer(Form):
                     for m in sp['measurements'] 
                     for r in m['results'] 
                     if self.result_error(sp['name'], m['name'], r['name'])]
-        self.export_to_excel(error_data, "UnitName_ERRORS")
+        self.export_to_excel(error_data, self.unitInput.Text.strip() + "_ERRORS")
 
     def AddSelectedResult(self, sender, args):
         # Get the selected items in the checkedResultsList ListBox.
@@ -1008,7 +1009,7 @@ class APxContainer(Form):
             return
 
         try:
-            self.export_to_excel(selected_signal_paths)
+            self.export_to_excel(selected_signal_paths, self.unitInput.Text.strip())
         except Exception as e:
             logging.exception("Error in calling export_to_excel")
             logging.error(f"An unexpected error occurred: {e}")
