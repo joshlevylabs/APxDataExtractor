@@ -1,4 +1,3 @@
-# APxDataExtractor
 ======================================================================
                    AP Sequence Runner - README.txt
 ======================================================================
@@ -7,12 +6,23 @@ ABOUT THE PROGRAM:
 ------------------
 AP Sequence Runner is a comprehensive software tool designed to automate, enhance, and simplify the execution of AP sequences and the retrieval of results. By offering an intuitive GUI, the software caters to a spectrum of users - from those just getting started with AP sequences to experienced professionals who require advanced functionalities.
 
-INSTALLING FROM WHEEL FILE:
----------------------------
-1. If you haven't already, ensure you have Python and pip installed on your machine.
-2. Navigate to the directory containing the `.whl` file.
-3. Install the package using pip: pip install APSequenceRunner-0.1-py3-none-any.whl
-4. After installation, all the required dependencies for AP Sequence Runner will be installed, and you can run the script as usual.
+INSTALLING WITH VIRTUAL ENVIRONMENT:
+------------------------------------
+1. If you haven't already, ensure you have Python installed on your machine.
+2. Navigate to the root directory of the cloned repository.
+3. Create a virtual environment: python -m venv apxenv
+4. 4. Activate the virtual environment:
+- On Windows:
+  ```
+  .\apxenv\Scripts\activate
+  ```
+- On macOS and Linux:
+  ```
+  source apxenv/bin/activate
+  ```
+5. Once the virtual environment is active, install the dependencies using: pip install -r requirements.txt
+6. After installation, you can run the script within this virtual environment.
+
 
 KEY FEATURES:
 -------------
