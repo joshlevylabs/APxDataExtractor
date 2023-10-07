@@ -1053,9 +1053,9 @@ class APxContainer(Form):
         except Exception as e:
             logging.error(f"Failed to load the workbook '{filename}'. Error: {e}")
             return
-        
+
         unit_no = self.unitInput.Text.strip()
-        
+
         try:
             for sp_idx, sp in enumerate(checked_signal_paths):
                 logging.info(f"Processing Signal Path {sp_idx+1}: {sp['name']}")
@@ -1063,18 +1063,17 @@ class APxContainer(Form):
                     logging.info(f"\tMeasurement {meas_idx+1}: {measurement['name']}")
                     for res_idx, result in enumerate(measurement["results"]):
                         logging.info(f"\t\tResult {res_idx+1}: {result['name']}")
+
                         sheet_title = f"{self.abbreviate_name(sp['name'])}_{self.abbreviate_name(measurement['name'])}_{self.abbreviate_name(result['name'])}"
-                        
+
                         if sheet_title not in wb.sheetnames:
-                            ws = wb.create_sheet(title=sheet_title)
+                            ws = wb.create_sheet(title=self.sanitize_sheet_name(sheet_title))
                             ws.append([f'Signal Path: {sp["name"]}'])
                             ws.append([f'Measurement: {measurement["name"]}'])
                             ws.append([f'Result: {result["name"]}'])
                         else:
                             ws = wb[sheet_title]
-                        
-                        first_empty_row = len(ws["A"]) + 1
-                        
+
                         # Handle xy values
                         if 'xValues' in result['data'] and 'yValues' in result['data']:
                             logging.info(f"Keys present in result['data']: {list(result['data'].keys())}")
@@ -1082,37 +1081,42 @@ class APxContainer(Form):
                             xValues = result['data']['xValues']
                             yValues = result['data']['yValues']
 
-                            new_sheet_created = False  # Initialize a flag to track if a new sheet is created
+                            # If xValues or yValues is a list of lists, unpack the first list.
+                            if isinstance(xValues[0], (list, tuple)):
+                                logging.warning(f"xValues contains nested lists. Unpacking the first list.")
+                                xValues = xValues[0]
 
-                            # Append data to existing sheet if possible
-                            if sheet_title in wb.sheetnames:
-                                ws = wb[sheet_title]
-                                                        
-                                existing_x_values = [cell.value for cell in ws['A'][3:ws.max_row]]
-                                if existing_x_values == xValues:
-                                    logging.info("Existing X values match the new data. Appending to existing sheet.")
-                                    first_empty_col = ws.max_column + 1
-                                    for row_idx, yValue in enumerate(yValues):
-                                        ws.cell(row=row_idx + 4, column=first_empty_col, value=yValue)
-                                    logging.info(f"Data successfully appended to {sheet_title} for XY values.")
-                                else:
-                                    logging.warning("Existing X values do not match the new data.")
-                                    new_sheet_created = True  # Set the flag to True if a new sheet is created
+                            # If yValues is a single list of values, wrap it in another list to make it consistent.
+                            if not isinstance(yValues[0], (list, tuple)):
+                                yValues = [yValues]
 
-                            # Force create a new sheet with a timestamp to store the new data only if not already created
-                            current_time_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-                            new_sheet_title = f"{sheet_title}_{current_time_str}"
-                            if not new_sheet_created:
-                                new_ws = wb.create_sheet(title=new_sheet_title)
-                                new_ws.append([f'Signal Path: {sp["name"]}'])
-                                new_ws.append([f'Measurement: {measurement["name"]}'])
-                                new_ws.append([f'Result: {result["name"]}'])
-                                new_ws.append(xValues)
-                                new_ws.append(yValues)
-                                                
-                                logging.info(f"Data added to new sheet: {new_sheet_title}")
+                            existing_x_values = [cell.value for cell in ws['A'][4:ws.max_row]]
+                            if existing_x_values == xValues:
+                                for channel in yValues:
+                                    col = ws.max_column + 1
+                                    for idx, y_val in enumerate(channel):
+                                        ws.cell(row=idx + 4, column=col, value=y_val)
+                                    col += 1
+                            else:
+                                current_time_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+                                new_sheet_title = f"{sheet_title}_{current_time_str}"
+                                new_ws = wb.create_sheet(title=self.sanitize_sheet_name(new_sheet_title))
+                                new_ws.append(["X Values"] + [f"{unit_descriptor} Ch{ch+1}" for ch in range(len(yValues))])
+                                for x in xValues:
+                                    row = [x]
+                                    for channel in yValues:
+                                        if isinstance(x, (list, tuple)):
+                                            logging.error(f"Trying to write a list as x-value to Excel: {x}")
+                                            break
+                                        if isinstance(channel, (list, tuple)):
+                                            row.append(channel[xValues.index(x)])
+                                        else:
+                                            logging.error(f"Trying to write a list as y-value to Excel: {channel}")
+                                            break
+                                    new_ws.append(row)
+
+                                logging.info(f"Data added to sheet: {new_ws.title}")
                             
-                            logging.info(f"Data added to new sheet: {new_sheet_title}")
                         if 'meterValues' in result['data']:
                             meter_sheet_title = f"{self.abbreviate_name(sp['name'])}_{self.abbreviate_name(measurement['name'])}_{self.abbreviate_name(result['name'])}"
                             
@@ -1137,15 +1141,12 @@ class APxContainer(Form):
                             for item in rawTextResults:
                                 ws.append([item]) 
 
-        except Exception as e:
-            logging.error(f"Error occurred while processing Signal Path {sp_idx+1}: {sp['name']}, Measurement {meas_idx+1}: {measurement['name']}, Result {res_idx+1}: {result['name']}. Error: {e}")
-            return
-                        
-        try:
+        
             wb.save(filename)
             logging.info(f"Data successfully appended to {filename}")
+
         except Exception as e:
-            logging.error(f"Error occurred while saving the workbook. Error: {e}")
+            logging.error(f"Error occurred while processing Signal Path {sp_idx+1}: {sp['name']}, Measurement {meas_idx+1}: {measurement['name']}, Result {res_idx+1}: {result['name']}. Error: {e}")
 
 
     def toggle_select_pass_file_button(self, sender, args):
