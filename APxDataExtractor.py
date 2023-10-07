@@ -1047,7 +1047,7 @@ class APxContainer(Form):
                 self.bSelectFile.BackColor = Color.Green
 
     def append_to_existing_excel(self, filename, checked_signal_paths, unit_descriptor):
-        print(f"Attempting to load: {filename}")  
+        logging.info("Starting the appending process...")
         try:
             wb = load_workbook(filename)
         except Exception as e:
@@ -1056,98 +1056,66 @@ class APxContainer(Form):
 
         unit_no = self.unitInput.Text.strip()
 
-        try:
-            for sp_idx, sp in enumerate(checked_signal_paths):
-                logging.info(f"Processing Signal Path {sp_idx+1}: {sp['name']}")
-                for meas_idx, measurement in enumerate(sp["measurements"]):
-                    logging.info(f"\tMeasurement {meas_idx+1}: {measurement['name']}")
-                    for res_idx, result in enumerate(measurement["results"]):
-                        logging.info(f"\t\tResult {res_idx+1}: {result['name']}")
+        for sp_idx, sp in enumerate(checked_signal_paths):
+            logging.info(f"Processing Signal Path {sp_idx + 1}: {sp['name']}")
+            for meas_idx, measurement in enumerate(sp["measurements"]):
+                for res_idx, result in enumerate(measurement["results"]):
+                    sheet_title = f"{self.abbreviate_name(sp['name'])}_{self.abbreviate_name(measurement['name'])}_{self.abbreviate_name(result['name'])}"
 
-                        sheet_title = f"{self.abbreviate_name(sp['name'])}_{self.abbreviate_name(measurement['name'])}_{self.abbreviate_name(result['name'])}"
+                    # Handle existing sheet or create a new one
+                    if sheet_title in wb.sheetnames:
+                        ws = wb[sheet_title]
+                    else:
+                        ws = wb.create_sheet(title=self.sanitize_sheet_name(sheet_title))
+                        ws.append([f'Signal Path: {sp["name"]}'])
+                        ws.append([f'Measurement: {measurement["name"]}'])
+                        ws.append([f'Result: {result["name"]}'])
 
-                        if sheet_title not in wb.sheetnames:
-                            ws = wb.create_sheet(title=self.sanitize_sheet_name(sheet_title))
-                            ws.append([f'Signal Path: {sp["name"]}'])
-                            ws.append([f'Measurement: {measurement["name"]}'])
-                            ws.append([f'Result: {result["name"]}'])
+                    # Handle xy values
+                    if 'xValues' in result['data'] and 'yValues' in result['data']:
+                        xValues = result['data']['xValues']
+                        if isinstance(xValues[0], (list, tuple)):
+                            xValues = xValues[0]
+
+                        yValues = result['data']['yValues']
+                        if not isinstance(yValues[0], (list, tuple)):
+                            yValues = [yValues]
+
+                        col = ws.max_column + 1
+                        for channel_idx, y_set in enumerate(yValues):  # Replacing y_set for clearer indexing
+                            ws.cell(row=4, column=col, value=f"Ch{channel_idx+1} {unit_descriptor}")  # Adjusted header row
+                            for row_idx, y_val in enumerate(y_set):
+                                ws.cell(row=row_idx + 5, column=col, value=y_val)  # Adjusted start row
+                            col += 1
+
+
+                    # Handle meter values
+                    if 'meterValues' in result['data']:
+                        meter_sheet_title = f"{self.abbreviate_name(sp['name'])}_{self.abbreviate_name(measurement['name'])}_{self.abbreviate_name(result['name'])}"
+
+                        if meter_sheet_title in wb.sheetnames:
+                            meter_ws = wb[meter_sheet_title]
                         else:
-                            ws = wb[sheet_title]
+                            meter_ws = wb.create_sheet(title=meter_sheet_title)
+                            meter_ws.append([f'Signal Path: {sp["name"]}'])
+                            meter_ws.append([f'Measurement: {measurement["name"]}'])
+                            meter_ws.append([f'Result: {result["name"]}'])
+                            meter_ws.append([unit_descriptor])
 
-                        # Handle xy values
-                        if 'xValues' in result['data'] and 'yValues' in result['data']:
-                            logging.info(f"Keys present in result['data']: {list(result['data'].keys())}")
+                        last_column = meter_ws.max_column + 1
+                        meter_ws.cell(row=4, column=last_column, value=unit_no)
+                        for idx, val in enumerate(result['data']['meterValues'], start=5):
+                            meter_ws.cell(row=idx, column=last_column, value=val)
+                        logging.info(f"Appended meter values to sheet: {meter_ws.title}")
 
-                            xValues = result['data']['xValues']
-                            yValues = result['data']['yValues']
+                    # Handle raw text results
+                    if 'rawTextResults' in result['data']:
+                        rawTextResults = result['data']['rawTextResults']
+                        for item in rawTextResults:
+                            ws.append([item])
 
-                            # If xValues or yValues is a list of lists, unpack the first list.
-                            if isinstance(xValues[0], (list, tuple)):
-                                logging.warning(f"xValues contains nested lists. Unpacking the first list.")
-                                xValues = xValues[0]
-
-                            # If yValues is a single list of values, wrap it in another list to make it consistent.
-                            if not isinstance(yValues[0], (list, tuple)):
-                                yValues = [yValues]
-
-                            existing_x_values = [cell.value for cell in ws['A'][4:ws.max_row]]
-                            if existing_x_values == xValues:
-                                for channel in yValues:
-                                    col = ws.max_column + 1
-                                    for idx, y_val in enumerate(channel):
-                                        ws.cell(row=idx + 4, column=col, value=y_val)
-                                    col += 1
-                            else:
-                                current_time_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-                                new_sheet_title = f"{sheet_title}_{current_time_str}"
-                                new_ws = wb.create_sheet(title=self.sanitize_sheet_name(new_sheet_title))
-                                new_ws.append(["X Values"] + [f"{unit_descriptor} Ch{ch+1}" for ch in range(len(yValues))])
-                                for x in xValues:
-                                    row = [x]
-                                    for channel in yValues:
-                                        if isinstance(x, (list, tuple)):
-                                            logging.error(f"Trying to write a list as x-value to Excel: {x}")
-                                            break
-                                        if isinstance(channel, (list, tuple)):
-                                            row.append(channel[xValues.index(x)])
-                                        else:
-                                            logging.error(f"Trying to write a list as y-value to Excel: {channel}")
-                                            break
-                                    new_ws.append(row)
-
-                                logging.info(f"Data added to sheet: {new_ws.title}")
-                            
-                        if 'meterValues' in result['data']:
-                            meter_sheet_title = f"{self.abbreviate_name(sp['name'])}_{self.abbreviate_name(measurement['name'])}_{self.abbreviate_name(result['name'])}"
-                            
-                            if meter_sheet_title not in wb.sheetnames:
-                                meter_ws = wb.create_sheet(title=meter_sheet_title)
-                                meter_ws.append([f'Signal Path: {sp["name"]}'])
-                                meter_ws.append([f'Measurement: {measurement["name"]}'])
-                                meter_ws.append([f'Result: {result["name"]}'])
-                                meter_ws.append([unit_descriptor])
-                            else:
-                                meter_ws = wb[meter_sheet_title]
-                            
-                            last_column = meter_ws.max_column + 1
-                            meter_ws.cell(row=4, column=last_column, value=unit_no)  # Header is placed at row 4
-                            
-                            for idx, val in enumerate(result['data']['meterValues'], start=5): # Data starts from row 5
-                                meter_ws.cell(row=idx, column=last_column, value=val)
-
-                        # Handle Raw Text Results
-                        if 'rawTextResults' in result['data']:
-                            rawTextResults = result['data']['rawTextResults']
-                            for item in rawTextResults:
-                                ws.append([item]) 
-
-        
-            wb.save(filename)
-            logging.info(f"Data successfully appended to {filename}")
-
-        except Exception as e:
-            logging.error(f"Error occurred while processing Signal Path {sp_idx+1}: {sp['name']}, Measurement {meas_idx+1}: {measurement['name']}, Result {res_idx+1}: {result['name']}. Error: {e}")
-
+        wb.save(filename)
+        logging.info(f"Data successfully appended to {filename}")
 
     def toggle_select_pass_file_button(self, sender, args):
         self.selectPassFileButton.Enabled = self.appendPassCheckBox.Checked
