@@ -757,13 +757,16 @@ class APxContainer(Form):
                             meter_ws.append([f'Signal Path: {sp["name"]}'])
                             meter_ws.append([f'Measurement: {measurement["name"]}'])
                             meter_ws.append([f'Result: {result["name"]}'])
-                            meter_ws.append([unit_descriptor])
+                            
+                            # Add the headers for 'Channels' and the serial number
+                            meter_ws.append(['Channels', unit_descriptor])
                             
                             meterValues = result['data']['meterValues']
-                            for val in meterValues:
-                                meter_ws.append([val])
                             
-                            logging.info(f"Meter Values: {result['data']['meterValues']}")
+                            # Adjusted to add the channel name to the start of each row
+                            for idx, val in enumerate(meterValues):
+                                meter_ws.append([f"Ch{idx+1}", val])  # The channel name "Chx" and its corresponding value on the same row
+                            
                             logging.info(f"Meter Values in export_to_excel: {result['data']['meterValues']}")
                             
                             has_created_sheet = True  # Set has_created_sheet to True when creating a sheet for meterValues

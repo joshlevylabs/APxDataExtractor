@@ -1,33 +1,32 @@
-2023-10-06 17:45:02 INFO     Processing Signal Path: Josh's Signal Path 1
-2023-10-06 17:45:02 INFO     Checked Signal Path: Josh's Signal Path 1
-2023-10-06 17:45:02 INFO     	Checked Measurement: Frequency Response
-2023-10-06 17:45:02 INFO     Josh's Signal Path 1 | Frequency Response | RMS Level -> FAIL
-2023-10-06 17:45:02 WARNING  		RMS Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-06 17:45:02 INFO     	Checked Measurement: DC Level
-2023-10-06 17:45:02 INFO     Josh's Signal Path 1 | DC Level | DC Level -> PASS
-2023-10-06 17:45:02 WARNING  		DC Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-06 17:45:02 INFO     		Found Meter Values for Result: DC Level
-2023-10-06 17:45:02 INFO     			Meter Value 0: -0.002831484550572569
-2023-10-06 17:45:02 INFO     			Meter Value 1: -0.0011546174089007155
-2023-10-06 17:45:02 INFO     Processing Signal Path: Josh's Signal Path 2
-2023-10-06 17:45:02 INFO     Processing Signal Path: Josh's Signal Path 3
-2023-10-06 17:45:02 INFO     Processing Signal Path: Josh's Signal Path 4
-2023-10-06 17:45:02 INFO     Processing Signal Path: Josh's Signal Path 5
-2023-10-06 17:45:02 INFO     Processing Signal Path: Signal Path1
-2023-10-06 17:45:02 INFO     Total test results: 2
-2023-10-06 17:45:02 INFO     Number of failures: 1
-2023-10-06 17:45:02 INFO     Number of errors: 0
-2023-10-06 17:45:02 INFO     Pass rate: 50.00%
-2023-10-06 17:45:02 INFO     Fail rate: 50.00%
-2023-10-06 17:45:02 INFO     Error rate: 0.00%
-2023-10-06 17:45:02 INFO     List of measurement results that failed: Josh's Signal Path 1 | Frequency Response | RMS Level
-2023-10-06 17:45:02 INFO     List of measurement results that errored: 
-2023-10-06 17:45:04 WARNING  RMS Level does not have xy values.
-2023-10-06 17:45:04 INFO     Meter Values: System.Double[]
-2023-10-06 17:45:04 INFO     Meter Values in export_to_excel: System.Double[]
-2023-10-06 17:45:04 WARNING  DC Level does not have xy values.
-2023-10-06 17:45:04 INFO     Exported data to Bobby 12.xlsx.
-2023-10-06 17:45:10 INFO     Starting the appending process...
-2023-10-06 17:45:10 INFO     Processing Signal Path 1: Josh's Signal Path 1
-2023-10-06 17:45:10 INFO     Appended meter values to sheet: JSP1_DC Level_DC Level
-2023-10-06 17:45:10 INFO     Data successfully appended to C:/Users/joshual/Documents/Audio Precision/APx500 Python Example/APxDataExtractor/Bobby 12.xlsx
+2023-10-06 17:58:09 INFO     Processing Signal Path: Josh's Signal Path 1
+2023-10-06 17:58:09 INFO     Checked Signal Path: Josh's Signal Path 1
+2023-10-06 17:58:09 INFO     	Checked Measurement: Frequency Response
+2023-10-06 17:58:09 INFO     Josh's Signal Path 1 | Frequency Response | RMS Level -> FAIL
+2023-10-06 17:58:09 WARNING  		RMS Level does not have PassedLimitChecks attribute. Setting to False.
+2023-10-06 17:58:10 INFO     	Checked Measurement: DC Level
+2023-10-06 17:58:10 INFO     Josh's Signal Path 1 | DC Level | DC Level -> PASS
+2023-10-06 17:58:10 WARNING  		DC Level does not have PassedLimitChecks attribute. Setting to False.
+2023-10-06 17:58:10 INFO     		Found Meter Values for Result: DC Level
+2023-10-06 17:58:10 INFO     			Meter Value 0: -0.002831484550572569
+2023-10-06 17:58:10 INFO     			Meter Value 1: -0.0011546174089007155
+2023-10-06 17:58:10 INFO     Processing Signal Path: Josh's Signal Path 2
+2023-10-06 17:58:10 INFO     Processing Signal Path: Josh's Signal Path 3
+2023-10-06 17:58:10 INFO     Processing Signal Path: Josh's Signal Path 4
+2023-10-06 17:58:10 INFO     Processing Signal Path: Josh's Signal Path 5
+2023-10-06 17:58:10 INFO     Processing Signal Path: Signal Path1
+2023-10-06 17:58:10 INFO     Total test results: 2
+2023-10-06 17:58:10 INFO     Number of failures: 1
+2023-10-06 17:58:10 INFO     Number of errors: 0
+2023-10-06 17:58:10 INFO     Pass rate: 50.00%
+2023-10-06 17:58:10 INFO     Fail rate: 50.00%
+2023-10-06 17:58:10 INFO     Error rate: 0.00%
+2023-10-06 17:58:10 INFO     List of measurement results that failed: Josh's Signal Path 1 | Frequency Response | RMS Level
+2023-10-06 17:58:10 INFO     List of measurement results that errored: 
+2023-10-06 17:58:11 WARNING  RMS Level does not have xy values.
+2023-10-06 17:58:11 INFO     Meter Values in export_to_excel: System.Double[]
+2023-10-06 17:58:11 WARNING  DC Level does not have xy values.
+2023-10-06 17:58:11 INFO     Exported data to blahboo.xlsx.
+2023-10-06 17:58:20 INFO     Starting the appending process...
+2023-10-06 17:58:20 INFO     Processing Signal Path 1: Josh's Signal Path 1
+2023-10-06 17:58:20 INFO     Appended meter values to sheet: JSP1_DC Level_DC Level
+2023-10-06 17:58:21 INFO     Data successfully appended to C:/Users/joshual/Documents/Audio Precision/APx500 Python Example/APxDataExtractor/blahboo.xlsx
