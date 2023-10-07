@@ -712,6 +712,9 @@ class APxContainer(Form):
             if unit_descriptor:  # Incorporate the descriptor into the filename
                 file_name = f"{unit_descriptor}.xlsx" if unit_descriptor else "exported_data.xlsx"
 
+            # Define cleaned_descriptor to remove the suffixes
+            cleaned_descriptor = unit_descriptor.replace("_PASS", "").replace("_FAIL", "").replace("_ERRORS", "")
+
             for sp in checked_signal_paths:
                 for measurement in sp["measurements"]:
                     for result in measurement["results"]:
@@ -728,7 +731,8 @@ class APxContainer(Form):
                             ws.append([f'Measurement: {measurement["name"]}'])
                             ws.append([f'Result: {result["name"]}'])
                             # Modified header to include Serial Number for Y Values
-                            ws.append(["X Values"] + [f"{unit_descriptor} Ch{idx+1}" for idx in range(len(result['data']['yValues']))])
+                            cleaned_descriptor = unit_descriptor.replace("_PASS", "").replace("_FAIL", "").replace("_ERRORS", "")
+                            ws.append(["X Values"] + [f"{cleaned_descriptor} Ch{idx+1}" for idx in range(len(result['data']['yValues']))])
                             if "ch2" in result['name'].lower():
                                 continue  # skip the ch2 result to avoid duplicating data
                         
@@ -759,7 +763,7 @@ class APxContainer(Form):
                             meter_ws.append([f'Result: {result["name"]}'])
                             
                             # Add the headers for 'Channels' and the serial number
-                            meter_ws.append(['Channels', unit_descriptor])
+                            meter_ws.append(['Channels', cleaned_descriptor])
                             
                             meterValues = result['data']['meterValues']
                             
@@ -806,7 +810,10 @@ class APxContainer(Form):
                         for m in sp['measurements'] 
                         for r in m['results'] 
                         if not (self.is_result_failed(sp['name'], m['name'], r['name']) or self.result_error(sp['name'], m['name'], r['name']))]
-        self.export_to_excel(passing_data, self.unitInput.Text.strip() + "_PASS")
+        if self.appendPassCheckBox.Checked and self.selectedPassFilePath:
+            self.append_to_existing_excel(self.selectedPassFilePath, passing_data, self.unitInput.Text.strip() + "_PASS")
+        else:
+            self.export_to_excel(passing_data, self.unitInput.Text.strip() + "_PASS")
 
 
     def export_fail(self, sender=None, args=None):
@@ -815,7 +822,10 @@ class APxContainer(Form):
                     for m in sp['measurements'] 
                     for r in m['results'] 
                     if self.is_result_failed(sp['name'], m['name'], r['name'])]
-        self.export_to_excel(failed_data, self.unitInput.Text.strip() + "_FAIL")
+        if self.appendFailCheckBox.Checked and self.selectedFailFilePath:
+            self.append_to_existing_excel(self.selectedFailFilePath, failed_data, self.unitInput.Text.strip() + "_FAIL")
+        else:
+            self.export_to_excel(failed_data, self.unitInput.Text.strip() + "_FAIL")
 
     def export_error(self, sender=None, args=None):
         error_data = [sp
@@ -823,7 +833,10 @@ class APxContainer(Form):
                     for m in sp['measurements'] 
                     for r in m['results'] 
                     if self.result_error(sp['name'], m['name'], r['name'])]
-        self.export_to_excel(error_data, self.unitInput.Text.strip() + "_ERRORS")
+        if self.appendErrorCheckBox.Checked and self.selectedErrorFilePath:
+            self.append_to_existing_excel(self.selectedErrorFilePath, error_data, self.unitInput.Text.strip() + "_ERRORS")
+        else:
+            self.export_to_excel(error_data, self.unitInput.Text.strip() + "_ERRORS")
 
     def AddSelectedResult(self, sender, args):
         # Get the selected items in the checkedResultsList ListBox.
@@ -1058,6 +1071,9 @@ class APxContainer(Form):
             return
 
         unit_no = self.unitInput.Text.strip()
+        
+        # Define cleaned_descriptor to remove the suffixes
+        cleaned_descriptor = unit_descriptor.replace("_PASS", "").replace("_FAIL", "").replace("_ERRORS", "")
 
         for sp_idx, sp in enumerate(checked_signal_paths):
             logging.info(f"Processing Signal Path {sp_idx + 1}: {sp['name']}")
@@ -1085,10 +1101,11 @@ class APxContainer(Form):
                             yValues = [yValues]
 
                         col = ws.max_column + 1
-                        for channel_idx, y_set in enumerate(yValues):  # Replacing y_set for clearer indexing
-                            ws.cell(row=4, column=col, value=f"Ch{channel_idx+1} {unit_descriptor}")  # Adjusted header row
+                        for channel_idx, y_set in enumerate(yValues):
+                            # Adjust the header name to follow "<Serial number> <CHx>" convention
+                            ws.cell(row=4, column=col, value=f"{cleaned_descriptor} Ch{channel_idx+1}")  # <-- Adjusted this line to fix naming convention
                             for row_idx, y_val in enumerate(y_set):
-                                ws.cell(row=row_idx + 5, column=col, value=y_val)  # Adjusted start row
+                                ws.cell(row=row_idx + 5, column=col, value=y_val)
                             col += 1
 
 
