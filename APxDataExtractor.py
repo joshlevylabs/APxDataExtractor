@@ -209,6 +209,11 @@ class APxContainer(Form):
         self.statisticsGroupBox.Location = Point(310, 300)  # Adjust as needed
         self.statisticsGroupBox.Size = Size(680, 300)  # Adjust as needed
 
+        self.total_tests_cumulative = 0
+        self.total_passed_cumulative = 0
+        self.total_failed_cumulative = 0
+        self.total_errors_cumulative = 0
+
         # Labels for Heading
         headings = ["Passing", "Fail", "Error"]
         for i, text in enumerate(headings):
@@ -367,6 +372,26 @@ class APxContainer(Form):
         self.selectFailFileButton.Enabled = False
         self.selectErrorFileButton.Enabled = False
 
+        # Create a GroupBox frame for MFGT-RUN
+        self.mfgtFrame = GroupBox()
+        self.mfgtFrame.Text = "Manufacturing Test Run"
+        self.mfgtFrame.Location = Point(20, 500)  # Adjust the location as per your GUI layout. This places it further down the GUI.
+        self.mfgtFrame.Size = Size(280, 70)  # This size should comfortably house the button, but you can adjust it if needed.
+        self.Controls.Add(self.mfgtFrame)
+
+        # Add the new button for MFGT-RUN within the mfgtFrame GroupBox
+        self.bMFGTRun = Button()
+        self.bMFGTRun.Text = "MFGT-RUN"
+        self.bMFGTRun.Location = Point(30, 20)  # This positions the button within the mfgtFrame GroupBox.
+        self.bMFGTRun.Size = Size(200, 30)
+        self.bMFGTRun.Click += self.MFGT_RunSequence
+        self.mfgtFrame.Controls.Add(self.bMFGTRun)
+        self.controlButtonFrame = GroupBox()
+        self.controlButtonFrame.Text = "Control Buttons"
+        self.controlButtonFrame.Location = Point(20, 60)  # Adjust as necessary
+        self.controlButtonFrame.Size = Size(280, 440)  # Adjust the size to encompass all buttons
+
+
         # Initialize APx and checkedData
         self.APx = APx500_Application()
         self.checkedData = []
@@ -379,7 +404,7 @@ class APxContainer(Form):
         except Exception as e:
             logging.exception("An error occurred during sequence run:")
             logging.error(f"An unexpected error occurred: {e}\nCheck the log file for more details.")
-
+        
     def updateCheckedMeasurementsList(self, sender, args):
         PASS_COLOR = Color.Green
         FAIL_COLOR = Color.Red
@@ -394,6 +419,10 @@ class APxContainer(Form):
 
         # Retrieve the selectedSignalPath from self.checkedData using selectedIndex
         selectedIndex = self.checkedSignalPathsList.SelectedIndices[0]
+        if selectedIndex < 0 or selectedIndex >= len(self.checkedData):
+            logging.error(f"Invalid index selected: {selectedIndex}. Size of checkedData: {len(self.checkedData)}")
+            return
+
         selectedSignalPath = self.checkedData[selectedIndex]
 
         # Populate the checkedMeasurementsList with red-colored items if they don’t pass the limit checks
@@ -409,6 +438,9 @@ class APxContainer(Form):
             elif has_failure:
                 m_item.ForeColor = FAIL_COLOR
             self.checkedMeasurementsList.Items.Add(m_item)
+        
+        logging.info(f"Size of checkedData: {len(self.checkedData)}")
+        logging.info(f"Selected index from checkedSignalPathsList: {selectedIndex}")
 
     def updateCheckedResultsList(self, sender, args):
         PASS_COLOR = Color.Green
@@ -424,9 +456,26 @@ class APxContainer(Form):
 
         # Retrieve the selectedSignalPath and selectedMeasurement from self.checkedData using indices
         spIndex = self.checkedSignalPathsList.SelectedIndices[0]
+
+        if spIndex < 0 or spIndex >= len(self.checkedData):
+            logging.error(f"Invalid signal path index selected: {spIndex}. Size of checkedData: {len(self.checkedData)}")
+            return
+
         selectedSignalPath = self.checkedData[spIndex]
         mIndex = self.checkedMeasurementsList.SelectedIndices[0]
+
+        if mIndex < 0 or mIndex >= len(selectedSignalPath["measurements"]):
+            logging.error(f"Invalid measurement index selected: {mIndex}. Number of measurements in signal path: {len(selectedSignalPath['measurements'])}")
+            return
+
         selectedMeasurement = selectedSignalPath["measurements"][mIndex]
+
+        if spIndex < 0 or spIndex >= len(self.checkedData):
+            logging.error(f"Invalid signal path index selected: {spIndex}. Size of checkedData: {len(self.checkedData)}")
+            return
+        if mIndex < 0 or mIndex >= len(selectedSignalPath["measurements"]):
+            logging.error(f"Invalid measurement index selected: {mIndex}. Number of measurements in signal path: {len(selectedSignalPath['measurements'])}")
+            return
 
         # Populate the checkedResultsList with red-colored items if they don’t pass the limit checks
         for result in selectedMeasurement["results"]:
@@ -439,7 +488,12 @@ class APxContainer(Form):
             elif failed:
                 r_item.ForeColor = FAIL_COLOR
 
-            self.checkedResultsList.Items.Add(r_item)
+
+        logging.info(f"Size of checkedData: {len(self.checkedData)}")
+        logging.info(f"Selected index from checkedSignalPathsList: {spIndex}")
+        logging.info(f"Selected index from checkedMeasurementsList: {mIndex}")
+
+        self.checkedResultsList.Items.Add(r_item)
 
     def is_result_failed(self, signal_path_name, measurement_name, result_name):
         try:
@@ -579,6 +633,7 @@ class APxContainer(Form):
                     current_sp["measurements"].append(current_measurement)
 
                 checked_signal_paths.append(current_sp)
+                logging.info(f"Added a new signal path to checked_signal_paths. Total items now: {len(checked_signal_paths)}")
 
         except Exception as e:
             logging.error(f"An unexpected error occurred: {e}\nCheck the log file for more details.")
@@ -600,6 +655,23 @@ class APxContainer(Form):
                 sp_item.ForeColor = FAIL_COLOR
 
             self.checkedSignalPathsList.Items.Add(sp_item)
+            logging.info(f"Added a new item to checkedSignalPathsList. Total items now: {self.checkedSignalPathsList.Items.Count}")
+        
+        # Update the self.checkedData based on the populated checked_signal_paths
+        self.checkedData = checked_signal_paths
+        self.total_tests_cumulative += total_results
+        self.total_passed_cumulative += (total_results - failed_results - error_results)
+        self.total_failed_cumulative += failed_results
+        self.total_errors_cumulative += error_results
+
+        self.update_statistics(self.total_tests_cumulative, self.total_failed_cumulative, self.total_errors_cumulative, failed_results_list, error_results_list, checked_signal_paths)
+
+        return checked_signal_paths
+    
+    def update_statistics(self, total_results, failed_results, error_results, failed_results_list, error_results_list, checked_signal_paths):
+        PASS_COLOR = Color.Green
+        FAIL_COLOR = Color.Red
+        ERROR_COLOR = Color.Orange
 
         # Displaying rates
         pass_rate = ((total_results - (failed_results + error_results)) / total_results) * 100 if total_results else 0
@@ -608,25 +680,24 @@ class APxContainer(Form):
 
         logging.info(f"Total test results: {total_results}")
         logging.info(f"Number of failures: {failed_results}")
-        logging.info(f"Number of errors: {error_results}")  # Log number of errors
+        logging.info(f"Number of errors: {error_results}")  
         logging.info(f"Pass rate: {pass_rate:.2f}%")
         logging.info(f"Fail rate: {fail_rate:.2f}%")
-        logging.info(f"Error rate: {error_rate:.2f}%")  # Log error rate
+        logging.info(f"Error rate: {error_rate:.2f}%")  
         logging.info(f"List of measurement results that failed: {', '.join([f'{s} | {m} | {r}' for s, m, r in failed_results_list])}")
-        logging.info(f"List of measurement results that errored: {', '.join([f'{s} | {m} | {r}' for s, m, r in error_results_list])}")  # Log errored results
+        logging.info(f"List of measurement results that errored: {', '.join([f'{s} | {m} | {r}' for s, m, r in error_results_list])}")  
 
         self.passRateLabel.Text = f"Pass Rate: {pass_rate:.2f}%"
         self.failRateLabel.Text = f"Fail Rate: {fail_rate:.2f}%"
-        self.errorRateLabel.Text = f"Error Rate: {error_rate:.2f}%"
-        
+        self.errorRateLabel.Text = f"Error Rate: {error_rate:.2f}%" 
+            
         # For displaying Number of Passed, Failed, and Errors
         self.passedNumberLabel.Text = f"{total_results - failed_results - error_results}"
         self.failedNumberLabel.Text = f"{failed_results}"
         self.errorNumberLabel.Text = f"{error_results}"
 
         # For updating Number of Items
-        self.totalItemsLabel.Text = f"Number Of Items: {total_results}"  # <-- This is the added line
-
+        self.totalItemsLabel.Text = f"Total # of Tests: {total_results}"
 
         # Updating List of Passing, Failing, and Errors
         passing_list = [f"{sp['name']} | {m['name']} | {r['name']}" 
@@ -638,11 +709,6 @@ class APxContainer(Form):
         self.passedListBox.Text = "List of Passing: " + '\n'.join(passing_list) + '\n'
         self.failureListTextBox.Text = "List of Failures: " + '\n'.join([f"{s} | {m} | {r}" for s, m, r in failed_results_list]) + '\n'
         self.errorListTextBox.Text = "List of Errors: " + '\n'.join([f"{s} | {m} | {r}" for s, m, r in error_results_list]) + '\n'
-
-
-        self.checkedData = checked_signal_paths
-        return checked_signal_paths
-
 
     def ClearAll(self, sender, args):
         self.checkedSignalPathsList.Items.Clear()
@@ -718,6 +784,9 @@ class APxContainer(Form):
             for sp in checked_signal_paths:
                 for measurement in sp["measurements"]:
                     for result in measurement["results"]:
+
+                        xy_values_found = False  # Add a flag to track if xy values are found
+
                         if 'xValues' in result['data'] and 'yValues' in result['data']:
                             # Ensure xValues is always a list.
                             xValues = result['data']['xValues']
@@ -751,6 +820,9 @@ class APxContainer(Form):
                                         yRow.append(None)
                                 row = [xValue] + yRow
                                 ws.append(row)
+                                has_created_sheet = True 
+                                xy_values_found = True  # Set the flag here!
+
 
                         if 'meterValues' in result['data']:
                             # Create a new sheet for Meter Values.
@@ -770,15 +842,14 @@ class APxContainer(Form):
                             # Adjusted to add the channel name to the start of each row
                             for idx, val in enumerate(meterValues):
                                 meter_ws.append([f"Ch{idx+1}", val])  # The channel name "Chx" and its corresponding value on the same row
-                            
-                            logging.info(f"Meter Values in export_to_excel: {result['data']['meterValues']}")
-                            
+                                                        
                             has_created_sheet = True  # Set has_created_sheet to True when creating a sheet for meterValues
                                         
                         if 'rawTextResults' in result['data']:
                             ws.append(["Raw Text Results"])
                             rawTextResults = result['data']['rawTextResults']
                             ws.append(rawTextResults)
+                            has_created_sheet = True
 
                         for vertical_axis in [VerticalAxis.Left, VerticalAxis.Right]:
                             for data_type_str in ["Measured", "Fitted", "Residual"]:
@@ -791,11 +862,15 @@ class APxContainer(Form):
                                     for row_idx, xValue in enumerate(result['data'][x_key]):
                                         row = [xValue] + [result['data'][y_key][ch_idx][row_idx] for ch_idx in range(len(result['data'][y_key]))]
                                         ws.append(row)
-                        else:
+                                    xy_values_found = True  # Update the flag if xy values are found
+
+                        if not xy_values_found:  # This remains outside the nested loop
                             logging.warning(f"{result['name']} does not have xy values.")
+
             if has_created_sheet:
+                # Remove the default "Sheet" if it exists in the workbook.
                 if "Sheet" in wb.sheetnames:
-                    wb.remove(wb["Sheet"])
+                    del wb["Sheet"]
                 wb.save(file_name)
                 logging.info(f"Exported data to {file_name}.")
             else:
@@ -804,40 +879,42 @@ class APxContainer(Form):
             logging.exception("An error occurred during Excel export:")
             logging.error(f"An unexpected error occurred: {e}\nCheck the log file for more details.")
     
+    def filter_data(self, condition):
+        filtered_data = []
+        for sp in self.checkedData:
+            new_sp = dict(sp)  # Create a shallow copy of the signal path dict.
+            new_measurements = []
+            for m in sp['measurements']:
+                new_m = dict(m)  # Create a shallow copy of the measurement dict.
+                new_results = [r for r in m['results'] if condition(sp['name'], m['name'], r['name'])]
+                if new_results:
+                    new_m['results'] = new_results
+                    new_measurements.append(new_m)
+            if new_measurements:
+                new_sp['measurements'] = new_measurements
+                filtered_data.append(new_sp)
+        return filtered_data
+
     def export_pass(self, sender=None, args=None):
-        passing_data = [sp 
-                        for sp in self.checkedData 
-                        for m in sp['measurements'] 
-                        for r in m['results'] 
-                        if not (self.is_result_failed(sp['name'], m['name'], r['name']) or self.result_error(sp['name'], m['name'], r['name']))]
+        passing_data = self.filter_data(lambda sp, m, r: not (self.is_result_failed(sp, m, r) or self.result_error(sp, m, r)))
         if self.appendPassCheckBox.Checked and self.selectedPassFilePath:
             self.append_to_existing_excel(self.selectedPassFilePath, passing_data, self.unitInput.Text.strip() + "_PASS")
         else:
             self.export_to_excel(passing_data, self.unitInput.Text.strip() + "_PASS")
 
-
     def export_fail(self, sender=None, args=None):
-        failed_data = [sp 
-                    for sp in self.checkedData 
-                    for m in sp['measurements'] 
-                    for r in m['results'] 
-                    if self.is_result_failed(sp['name'], m['name'], r['name'])]
+        failed_data = self.filter_data(self.is_result_failed)
         if self.appendFailCheckBox.Checked and self.selectedFailFilePath:
             self.append_to_existing_excel(self.selectedFailFilePath, failed_data, self.unitInput.Text.strip() + "_FAIL")
         else:
             self.export_to_excel(failed_data, self.unitInput.Text.strip() + "_FAIL")
 
     def export_error(self, sender=None, args=None):
-        error_data = [sp
-                    for sp in self.checkedData 
-                    for m in sp['measurements'] 
-                    for r in m['results'] 
-                    if self.result_error(sp['name'], m['name'], r['name'])]
+        error_data = self.filter_data(self.result_error)
         if self.appendErrorCheckBox.Checked and self.selectedErrorFilePath:
             self.append_to_existing_excel(self.selectedErrorFilePath, error_data, self.unitInput.Text.strip() + "_ERRORS")
         else:
             self.export_to_excel(error_data, self.unitInput.Text.strip() + "_ERRORS")
-
     def AddSelectedResult(self, sender, args):
         # Get the selected items in the checkedResultsList ListBox.
         selected_items = self.checkedResultsList.SelectedItems
@@ -1023,7 +1100,7 @@ class APxContainer(Form):
             if copied_sp['measurements'] or copied_sp['meterValues']:
                 selected_signal_paths.append(copied_sp)
 
-        logging.info(f"Selected signal paths: {selected_signal_paths}")
+        #logging.info(f"Selected signal paths: {selected_signal_paths}")
 
         if not selected_signal_paths:
             logging.warning("No matched data to export.")
@@ -1149,7 +1226,21 @@ class APxContainer(Form):
     def toggleSelectFileButton(self, sender, args):
         self.bSelectFile.Enabled = self.appendCheckbox.Checked
 
-    
+    def MFGT_RunSequence(self, sender=None, args=None):
+        self.APxRunSequence(sender, args)  # Run sequence
+        self.GetCheckedData()  # Make sure to retrieve and update stats after running the sequence
+        self.ExportCheckedDataToExcel()  # Exports all data to excel
+        self.export_pass()  # Export pass data
+        self.export_fail()  # Export fail data
+        self.export_error()  # Export error data
+
+    def reset_cumulative_data(self):
+        self.total_tests_cumulative = 0
+        self.total_passed_cumulative = 0
+        self.total_failed_cumulative = 0
+        self.total_errors_cumulative = 0
+
+
 def main():
     Application.EnableVisualStyles()
     form = APxContainer()
