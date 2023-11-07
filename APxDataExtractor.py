@@ -528,7 +528,7 @@ class APxContainer(Form):
             logging.info(f"\t\tPassedLimitChecks for {sequence_result.Name}: {passed_limit_checks}")
         else:
             passed_limit_checks = False
-            logging.warning(f"\t\t{sequence_result.Name} does not have PassedLimitChecks attribute. Setting to False.")
+            #logging.warning(f"\t\t{sequence_result.Name} does not have PassedLimitChecks attribute. Setting to False.")
 
         # Check and Get XYValues
         for vertical_axis in [VerticalAxis.Left, VerticalAxis.Right]:
@@ -548,10 +548,10 @@ class APxContainer(Form):
         if sequence_result.HasMeterValues:
             meterValues = sequence_result.GetMeterValues()
             data['meterValues'] = meterValues
-            logging.info(f"\t\tFound Meter Values for Result: {sequence_result.Name}")
+            #logging.info(f"\t\tFound Meter Values for Result: {sequence_result.Name}")
             # Log each meter value directly.
-            for idx, value in enumerate(meterValues):
-                logging.info(f"\t\t\tMeter Value {idx}: {value}")
+            #for idx, value in enumerate(meterValues):
+            #    logging.info(f"\t\t\tMeter Value {idx}: {value}")
 
         # Check and Get RawTextResults
         if sequence_result.HasRawTextResults:
@@ -787,11 +787,20 @@ class APxContainer(Form):
 
                         xy_values_found = False  # Add a flag to track if xy values are found
 
+                        # Handle xy values
                         if 'xValues' in result['data'] and 'yValues' in result['data']:
-                            # Ensure xValues is always a list.
                             xValues = result['data']['xValues']
+                            yValues = result['data']['yValues']
+                            
+                            if not xValues or not yValues:  # Check if either xValues or yValues is empty
+                                logging.warning(f"xValues or yValues is empty for {result['name']}.")
+                                continue
+                            
                             if isinstance(xValues[0], (list, tuple)):
                                 xValues = xValues[0]
+                                
+                            if not isinstance(yValues[0], (list, tuple)):
+                                yValues = [yValues]
                             
                             sheet_title = f"{self.abbreviate_name(sp['name'])}_{self.abbreviate_name(measurement['name'])}_{self.abbreviate_name(result['name'])}"
                             sheet_name = self.unique_sheet_name(wb, sheet_title)
@@ -1140,6 +1149,7 @@ class APxContainer(Form):
                 self.bSelectFile.BackColor = Color.Green
 
     def append_to_existing_excel(self, filename, checked_signal_paths, unit_descriptor):
+        
         logging.info("Starting the appending process...")
         try:
             wb = load_workbook(filename)
@@ -1169,13 +1179,17 @@ class APxContainer(Form):
 
                     # Handle xy values
                     if 'xValues' in result['data'] and 'yValues' in result['data']:
-                        xValues = result['data']['xValues']
-                        if isinstance(xValues[0], (list, tuple)):
+                        xValues = result['data'].get('xValues', [])
+                        if xValues and isinstance(self.safe_access_list(xValues, 0), (list, tuple)):
                             xValues = xValues[0]
 
-                        yValues = result['data']['yValues']
-                        if not isinstance(yValues[0], (list, tuple)):
+                        yValues = result['data'].get('yValues', [])
+                        if not isinstance(self.safe_access_list(yValues, 0), (list, tuple)):
                             yValues = [yValues]
+
+                        for channel_idx, y_set in enumerate(yValues):
+                            if not isinstance(y_set, (list, tuple)):
+                                continue 
 
                         col = ws.max_column + 1
                         for channel_idx, y_set in enumerate(yValues):
@@ -1214,6 +1228,14 @@ class APxContainer(Form):
         wb.save(filename)
         logging.info(f"Data successfully appended to {filename}")
 
+    def safe_access_list(self, lst, idx):
+        """Safely access the idx-th element of a list or return None if out of range."""
+        try:
+            return lst[idx]
+        except IndexError:
+            return None
+
+            
     def toggle_select_pass_file_button(self, sender, args):
         self.selectPassFileButton.Enabled = self.appendPassCheckBox.Checked
 
@@ -1233,6 +1255,12 @@ class APxContainer(Form):
         self.export_pass()  # Export pass data
         self.export_fail()  # Export fail data
         self.export_error()  # Export error data
+        self.upload_to_Lyceum()
+
+    def upload_to_Lyceum():
+        # command = file_exported + code_to_use_template + code_to_upload
+        pass
+
 
     def reset_cumulative_data(self):
         self.total_tests_cumulative = 0

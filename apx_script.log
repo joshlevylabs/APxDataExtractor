@@ -1,298 +1,45 @@
-2023-10-07 23:01:19 INFO     Processing Signal Path: Josh's Signal Path 1
-2023-10-07 23:01:19 INFO     Checked Signal Path: Josh's Signal Path 1
-2023-10-07 23:01:19 INFO     	Checked Measurement: Frequency Response
-2023-10-07 23:01:19 INFO     Josh's Signal Path 1 | Frequency Response | RMS Level -> FAIL
-2023-10-07 23:01:19 WARNING  		RMS Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:19 INFO     	Checked Measurement: Second Frequency Response
-2023-10-07 23:01:20 INFO     Josh's Signal Path 1 | Second Frequency Response | RMS Level -> PASS
-2023-10-07 23:01:20 WARNING  		RMS Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:20 INFO     	Checked Measurement: DC Level
-2023-10-07 23:01:20 INFO     Josh's Signal Path 1 | DC Level | DC Level -> PASS
-2023-10-07 23:01:20 WARNING  		DC Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:20 INFO     		Found Meter Values for Result: DC Level
-2023-10-07 23:01:20 INFO     			Meter Value 0: -0.005026229708185663
-2023-10-07 23:01:20 INFO     			Meter Value 1: -3.710299907041409e-05
-2023-10-07 23:01:20 INFO     Added a new signal path to checked_signal_paths. Total items now: 1
-2023-10-07 23:01:20 INFO     Processing Signal Path: Josh's Signal Path 2
-2023-10-07 23:01:20 INFO     Checked Signal Path: Josh's Signal Path 2
-2023-10-07 23:01:20 INFO     	Checked Measurement: Signal Path Setup
-2023-10-07 23:01:20 INFO     Josh's Signal Path 2 | Signal Path Setup | RMS Level -> PASS
-2023-10-07 23:01:20 WARNING  		RMS Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:20 INFO     		Found Meter Values for Result: RMS Level
-2023-10-07 23:01:20 INFO     			Meter Value 0: 0.2824145982604781
-2023-10-07 23:01:20 INFO     			Meter Value 1: 0.2936995204183028
-2023-10-07 23:01:20 INFO     	Checked Measurement: Frequency Response
-2023-10-07 23:01:20 INFO     Josh's Signal Path 2 | Frequency Response | RMS Level -> PASS
-2023-10-07 23:01:20 WARNING  		RMS Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:20 INFO     Josh's Signal Path 2 | Frequency Response | Gain -> PASS
-2023-10-07 23:01:20 WARNING  		Gain does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:20 INFO     Josh's Signal Path 2 | Frequency Response | Relative Level (1.00000 kHz) -> PASS
-2023-10-07 23:01:20 WARNING  		Relative Level (1.00000 kHz) does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:20 INFO     	Checked Measurement: Maximum Output (CEA-2006)
-2023-10-07 23:01:20 INFO     Josh's Signal Path 2 | Maximum Output (CEA-2006) | RMS Level -> ERROR
-2023-10-07 23:01:20 WARNING  		RMS Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:20 INFO     		Found Meter Values for Result: RMS Level
-2023-10-07 23:01:20 INFO     			Meter Value 0: nan
-2023-10-07 23:01:20 INFO     			Meter Value 1: nan
-2023-10-07 23:01:20 INFO     Josh's Signal Path 2 | Maximum Output (CEA-2006) | THD+N Level -> ERROR
-2023-10-07 23:01:20 WARNING  		THD+N Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:20 INFO     		Found Meter Values for Result: THD+N Level
-2023-10-07 23:01:20 INFO     			Meter Value 0: nan
-2023-10-07 23:01:20 INFO     			Meter Value 1: nan
-2023-10-07 23:01:20 INFO     Josh's Signal Path 2 | Maximum Output (CEA-2006) | THD+N Ratio -> ERROR
-2023-10-07 23:01:20 WARNING  		THD+N Ratio does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:20 INFO     		Found Meter Values for Result: THD+N Ratio
-2023-10-07 23:01:20 INFO     			Meter Value 0: nan
-2023-10-07 23:01:20 INFO     			Meter Value 1: nan
-2023-10-07 23:01:20 INFO     Josh's Signal Path 2 | Maximum Output (CEA-2006) | Generator Level -> ERROR
-2023-10-07 23:01:20 WARNING  		Generator Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:20 INFO     		Found Meter Values for Result: Generator Level
-2023-10-07 23:01:20 INFO     			Meter Value 0: nan
-2023-10-07 23:01:20 INFO     			Meter Value 1: nan
-2023-10-07 23:01:20 INFO     Added a new signal path to checked_signal_paths. Total items now: 2
-2023-10-07 23:01:20 INFO     Processing Signal Path: Josh's Signal Path 3
-2023-10-07 23:01:20 INFO     Checked Signal Path: Josh's Signal Path 3
-2023-10-07 23:01:20 INFO     	Checked Measurement: Signal Path Setup
-2023-10-07 23:01:20 INFO     Josh's Signal Path 3 | Signal Path Setup | RMS Level -> PASS
-2023-10-07 23:01:20 WARNING  		RMS Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:20 INFO     		Found Meter Values for Result: RMS Level
-2023-10-07 23:01:20 INFO     			Meter Value 0: 0.2905078546237241
-2023-10-07 23:01:20 INFO     			Meter Value 1: 0.289073770227198
-2023-10-07 23:01:20 INFO     	Checked Measurement: Acoustic Response
-2023-10-07 23:01:20 INFO     Josh's Signal Path 3 | Acoustic Response | Smoothed Response -> PASS
-2023-10-07 23:01:20 WARNING  		Smoothed Response does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:20 INFO     Josh's Signal Path 3 | Acoustic Response | Phase -> PASS
-2023-10-07 23:01:20 WARNING  		Phase does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:20 INFO     Josh's Signal Path 3 | Acoustic Response | THD Ratio -> FAIL
-2023-10-07 23:01:20 WARNING  		THD Ratio does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:20 INFO     Added a new signal path to checked_signal_paths. Total items now: 3
-2023-10-07 23:01:20 INFO     Processing Signal Path: Josh's Signal Path 4
-2023-10-07 23:01:20 INFO     Checked Signal Path: Josh's Signal Path 4
-2023-10-07 23:01:20 INFO     	Checked Measurement: Signal Path Setup
-2023-10-07 23:01:20 INFO     Josh's Signal Path 4 | Signal Path Setup | RMS Level -> PASS
-2023-10-07 23:01:20 WARNING  		RMS Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:20 INFO     		Found Meter Values for Result: RMS Level
-2023-10-07 23:01:20 INFO     			Meter Value 0: 0.2921912102021534
-2023-10-07 23:01:20 INFO     			Meter Value 1: 0.3033671945989484
-2023-10-07 23:01:20 INFO     	Checked Measurement: DC Level
-2023-10-07 23:01:20 INFO     Josh's Signal Path 4 | DC Level | DC Level -> PASS
-2023-10-07 23:01:20 WARNING  		DC Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:20 INFO     		Found Meter Values for Result: DC Level
-2023-10-07 23:01:20 INFO     			Meter Value 0: 0.0014400978617817787
-2023-10-07 23:01:20 INFO     			Meter Value 1: 0.0018283351285571852
-2023-10-07 23:01:20 INFO     	Checked Measurement: Level and Gain
-2023-10-07 23:01:20 INFO     Josh's Signal Path 4 | Level and Gain | RMS Level -> PASS
-2023-10-07 23:01:20 WARNING  		RMS Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:20 INFO     		Found Meter Values for Result: RMS Level
-2023-10-07 23:01:20 INFO     			Meter Value 0: 0.2877970163374082
-2023-10-07 23:01:20 INFO     			Meter Value 1: 0.29188695371617035
-2023-10-07 23:01:20 INFO     Josh's Signal Path 4 | Level and Gain | Gain -> PASS
-2023-10-07 23:01:20 WARNING  		Gain does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:20 INFO     		Found Meter Values for Result: Gain
-2023-10-07 23:01:20 INFO     			Meter Value 0: 9.18172574372011
-2023-10-07 23:01:20 INFO     			Meter Value 1: 9.304293680801884
-2023-10-07 23:01:20 INFO     Josh's Signal Path 4 | Level and Gain | Peak Level -> PASS
-2023-10-07 23:01:20 WARNING  		Peak Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:20 INFO     		Found Meter Values for Result: Peak Level
-2023-10-07 23:01:20 INFO     			Meter Value 0: 0.9320190185680985
-2023-10-07 23:01:20 INFO     			Meter Value 1: 0.9050000046845526
-2023-10-07 23:01:20 INFO     Added a new signal path to checked_signal_paths. Total items now: 4
-2023-10-07 23:01:20 INFO     Processing Signal Path: Josh's Signal Path 5
-2023-10-07 23:01:20 INFO     Checked Signal Path: Josh's Signal Path 5
-2023-10-07 23:01:20 INFO     	Checked Measurement: Signal Path Setup
-2023-10-07 23:01:20 INFO     Josh's Signal Path 5 | Signal Path Setup | RMS Level -> PASS
-2023-10-07 23:01:20 WARNING  		RMS Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:20 INFO     		Found Meter Values for Result: RMS Level
-2023-10-07 23:01:20 INFO     			Meter Value 0: 0.2957379148826243
-2023-10-07 23:01:20 INFO     			Meter Value 1: 0.2996291338983441
-2023-10-07 23:01:20 INFO     	Checked Measurement: Acoustic Response
-2023-10-07 23:01:20 INFO     Josh's Signal Path 5 | Acoustic Response | Smoothed Response -> PASS
-2023-10-07 23:01:20 WARNING  		Smoothed Response does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:20 INFO     Josh's Signal Path 5 | Acoustic Response | Phase -> PASS
-2023-10-07 23:01:20 WARNING  		Phase does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:20 INFO     Josh's Signal Path 5 | Acoustic Response | THD Ratio -> PASS
-2023-10-07 23:01:20 WARNING  		THD Ratio does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:21 INFO     Added a new signal path to checked_signal_paths. Total items now: 5
-2023-10-07 23:01:21 INFO     Processing Signal Path: Signal Path1
-2023-10-07 23:01:21 INFO     Added a new item to checkedSignalPathsList. Total items now: 1
-2023-10-07 23:01:21 INFO     Added a new item to checkedSignalPathsList. Total items now: 2
-2023-10-07 23:01:21 INFO     Added a new item to checkedSignalPathsList. Total items now: 3
-2023-10-07 23:01:21 INFO     Added a new item to checkedSignalPathsList. Total items now: 4
-2023-10-07 23:01:21 INFO     Added a new item to checkedSignalPathsList. Total items now: 5
-2023-10-07 23:01:21 INFO     Total test results: 24
-2023-10-07 23:01:21 INFO     Number of failures: 2
-2023-10-07 23:01:21 INFO     Number of errors: 4
-2023-10-07 23:01:21 INFO     Pass rate: 75.00%
-2023-10-07 23:01:21 INFO     Fail rate: 8.33%
-2023-10-07 23:01:21 INFO     Error rate: 16.67%
-2023-10-07 23:01:21 INFO     List of measurement results that failed: Josh's Signal Path 1 | Frequency Response | RMS Level, Josh's Signal Path 3 | Acoustic Response | THD Ratio
-2023-10-07 23:01:21 INFO     List of measurement results that errored: Josh's Signal Path 2 | Maximum Output (CEA-2006) | RMS Level, Josh's Signal Path 2 | Maximum Output (CEA-2006) | THD+N Level, Josh's Signal Path 2 | Maximum Output (CEA-2006) | THD+N Ratio, Josh's Signal Path 2 | Maximum Output (CEA-2006) | Generator Level
-2023-10-07 23:01:21 INFO     Processing Signal Path: Josh's Signal Path 1
-2023-10-07 23:01:21 INFO     Checked Signal Path: Josh's Signal Path 1
-2023-10-07 23:01:21 INFO     	Checked Measurement: Frequency Response
-2023-10-07 23:01:21 INFO     Josh's Signal Path 1 | Frequency Response | RMS Level -> FAIL
-2023-10-07 23:01:21 WARNING  		RMS Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:21 INFO     	Checked Measurement: Second Frequency Response
-2023-10-07 23:01:21 INFO     Josh's Signal Path 1 | Second Frequency Response | RMS Level -> PASS
-2023-10-07 23:01:21 WARNING  		RMS Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:21 INFO     	Checked Measurement: DC Level
-2023-10-07 23:01:21 INFO     Josh's Signal Path 1 | DC Level | DC Level -> PASS
-2023-10-07 23:01:21 WARNING  		DC Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:21 INFO     		Found Meter Values for Result: DC Level
-2023-10-07 23:01:21 INFO     			Meter Value 0: -0.005026229708185663
-2023-10-07 23:01:21 INFO     			Meter Value 1: -3.710299907041409e-05
-2023-10-07 23:01:21 INFO     Added a new signal path to checked_signal_paths. Total items now: 1
-2023-10-07 23:01:21 INFO     Processing Signal Path: Josh's Signal Path 2
-2023-10-07 23:01:21 INFO     Checked Signal Path: Josh's Signal Path 2
-2023-10-07 23:01:21 INFO     	Checked Measurement: Signal Path Setup
-2023-10-07 23:01:21 INFO     Josh's Signal Path 2 | Signal Path Setup | RMS Level -> PASS
-2023-10-07 23:01:21 WARNING  		RMS Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:21 INFO     		Found Meter Values for Result: RMS Level
-2023-10-07 23:01:21 INFO     			Meter Value 0: 0.2824145982604781
-2023-10-07 23:01:21 INFO     			Meter Value 1: 0.2936995204183028
-2023-10-07 23:01:21 INFO     	Checked Measurement: Frequency Response
-2023-10-07 23:01:21 INFO     Josh's Signal Path 2 | Frequency Response | RMS Level -> PASS
-2023-10-07 23:01:21 WARNING  		RMS Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:21 INFO     Josh's Signal Path 2 | Frequency Response | Gain -> PASS
-2023-10-07 23:01:21 WARNING  		Gain does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:21 INFO     Josh's Signal Path 2 | Frequency Response | Relative Level (1.00000 kHz) -> PASS
-2023-10-07 23:01:21 WARNING  		Relative Level (1.00000 kHz) does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:21 INFO     	Checked Measurement: Maximum Output (CEA-2006)
-2023-10-07 23:01:21 INFO     Josh's Signal Path 2 | Maximum Output (CEA-2006) | RMS Level -> ERROR
-2023-10-07 23:01:21 WARNING  		RMS Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:21 INFO     		Found Meter Values for Result: RMS Level
-2023-10-07 23:01:21 INFO     			Meter Value 0: nan
-2023-10-07 23:01:21 INFO     			Meter Value 1: nan
-2023-10-07 23:01:21 INFO     Josh's Signal Path 2 | Maximum Output (CEA-2006) | THD+N Level -> ERROR
-2023-10-07 23:01:21 WARNING  		THD+N Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:21 INFO     		Found Meter Values for Result: THD+N Level
-2023-10-07 23:01:21 INFO     			Meter Value 0: nan
-2023-10-07 23:01:21 INFO     			Meter Value 1: nan
-2023-10-07 23:01:21 INFO     Josh's Signal Path 2 | Maximum Output (CEA-2006) | THD+N Ratio -> ERROR
-2023-10-07 23:01:21 WARNING  		THD+N Ratio does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:21 INFO     		Found Meter Values for Result: THD+N Ratio
-2023-10-07 23:01:21 INFO     			Meter Value 0: nan
-2023-10-07 23:01:21 INFO     			Meter Value 1: nan
-2023-10-07 23:01:21 INFO     Josh's Signal Path 2 | Maximum Output (CEA-2006) | Generator Level -> ERROR
-2023-10-07 23:01:21 WARNING  		Generator Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:21 INFO     		Found Meter Values for Result: Generator Level
-2023-10-07 23:01:21 INFO     			Meter Value 0: nan
-2023-10-07 23:01:21 INFO     			Meter Value 1: nan
-2023-10-07 23:01:21 INFO     Added a new signal path to checked_signal_paths. Total items now: 2
-2023-10-07 23:01:21 INFO     Processing Signal Path: Josh's Signal Path 3
-2023-10-07 23:01:21 INFO     Checked Signal Path: Josh's Signal Path 3
-2023-10-07 23:01:21 INFO     	Checked Measurement: Signal Path Setup
-2023-10-07 23:01:21 INFO     Josh's Signal Path 3 | Signal Path Setup | RMS Level -> PASS
-2023-10-07 23:01:21 WARNING  		RMS Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:21 INFO     		Found Meter Values for Result: RMS Level
-2023-10-07 23:01:21 INFO     			Meter Value 0: 0.2905078546237241
-2023-10-07 23:01:21 INFO     			Meter Value 1: 0.289073770227198
-2023-10-07 23:01:21 INFO     	Checked Measurement: Acoustic Response
-2023-10-07 23:01:21 INFO     Josh's Signal Path 3 | Acoustic Response | Smoothed Response -> PASS
-2023-10-07 23:01:21 WARNING  		Smoothed Response does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:21 INFO     Josh's Signal Path 3 | Acoustic Response | Phase -> PASS
-2023-10-07 23:01:21 WARNING  		Phase does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:22 INFO     Josh's Signal Path 3 | Acoustic Response | THD Ratio -> FAIL
-2023-10-07 23:01:22 WARNING  		THD Ratio does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:22 INFO     Added a new signal path to checked_signal_paths. Total items now: 3
-2023-10-07 23:01:22 INFO     Processing Signal Path: Josh's Signal Path 4
-2023-10-07 23:01:22 INFO     Checked Signal Path: Josh's Signal Path 4
-2023-10-07 23:01:22 INFO     	Checked Measurement: Signal Path Setup
-2023-10-07 23:01:22 INFO     Josh's Signal Path 4 | Signal Path Setup | RMS Level -> PASS
-2023-10-07 23:01:22 WARNING  		RMS Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:22 INFO     		Found Meter Values for Result: RMS Level
-2023-10-07 23:01:22 INFO     			Meter Value 0: 0.2921912102021534
-2023-10-07 23:01:22 INFO     			Meter Value 1: 0.3033671945989484
-2023-10-07 23:01:22 INFO     	Checked Measurement: DC Level
-2023-10-07 23:01:22 INFO     Josh's Signal Path 4 | DC Level | DC Level -> PASS
-2023-10-07 23:01:22 WARNING  		DC Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:22 INFO     		Found Meter Values for Result: DC Level
-2023-10-07 23:01:22 INFO     			Meter Value 0: 0.0014400978617817787
-2023-10-07 23:01:22 INFO     			Meter Value 1: 0.0018283351285571852
-2023-10-07 23:01:22 INFO     	Checked Measurement: Level and Gain
-2023-10-07 23:01:22 INFO     Josh's Signal Path 4 | Level and Gain | RMS Level -> PASS
-2023-10-07 23:01:22 WARNING  		RMS Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:22 INFO     		Found Meter Values for Result: RMS Level
-2023-10-07 23:01:22 INFO     			Meter Value 0: 0.2877970163374082
-2023-10-07 23:01:22 INFO     			Meter Value 1: 0.29188695371617035
-2023-10-07 23:01:22 INFO     Josh's Signal Path 4 | Level and Gain | Gain -> PASS
-2023-10-07 23:01:22 WARNING  		Gain does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:22 INFO     		Found Meter Values for Result: Gain
-2023-10-07 23:01:22 INFO     			Meter Value 0: 9.18172574372011
-2023-10-07 23:01:22 INFO     			Meter Value 1: 9.304293680801884
-2023-10-07 23:01:22 INFO     Josh's Signal Path 4 | Level and Gain | Peak Level -> PASS
-2023-10-07 23:01:22 WARNING  		Peak Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:22 INFO     		Found Meter Values for Result: Peak Level
-2023-10-07 23:01:22 INFO     			Meter Value 0: 0.9320190185680985
-2023-10-07 23:01:22 INFO     			Meter Value 1: 0.9050000046845526
-2023-10-07 23:01:22 INFO     Added a new signal path to checked_signal_paths. Total items now: 4
-2023-10-07 23:01:22 INFO     Processing Signal Path: Josh's Signal Path 5
-2023-10-07 23:01:22 INFO     Checked Signal Path: Josh's Signal Path 5
-2023-10-07 23:01:22 INFO     	Checked Measurement: Signal Path Setup
-2023-10-07 23:01:22 INFO     Josh's Signal Path 5 | Signal Path Setup | RMS Level -> PASS
-2023-10-07 23:01:22 WARNING  		RMS Level does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:22 INFO     		Found Meter Values for Result: RMS Level
-2023-10-07 23:01:22 INFO     			Meter Value 0: 0.2957379148826243
-2023-10-07 23:01:22 INFO     			Meter Value 1: 0.2996291338983441
-2023-10-07 23:01:22 INFO     	Checked Measurement: Acoustic Response
-2023-10-07 23:01:22 INFO     Josh's Signal Path 5 | Acoustic Response | Smoothed Response -> PASS
-2023-10-07 23:01:22 WARNING  		Smoothed Response does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:22 INFO     Josh's Signal Path 5 | Acoustic Response | Phase -> PASS
-2023-10-07 23:01:22 WARNING  		Phase does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:22 INFO     Josh's Signal Path 5 | Acoustic Response | THD Ratio -> PASS
-2023-10-07 23:01:22 WARNING  		THD Ratio does not have PassedLimitChecks attribute. Setting to False.
-2023-10-07 23:01:22 INFO     Added a new signal path to checked_signal_paths. Total items now: 5
-2023-10-07 23:01:22 INFO     Processing Signal Path: Signal Path1
-2023-10-07 23:01:22 INFO     Added a new item to checkedSignalPathsList. Total items now: 1
-2023-10-07 23:01:22 INFO     Added a new item to checkedSignalPathsList. Total items now: 2
-2023-10-07 23:01:22 INFO     Added a new item to checkedSignalPathsList. Total items now: 3
-2023-10-07 23:01:22 INFO     Added a new item to checkedSignalPathsList. Total items now: 4
-2023-10-07 23:01:22 INFO     Added a new item to checkedSignalPathsList. Total items now: 5
-2023-10-07 23:01:22 INFO     Total test results: 48
-2023-10-07 23:01:22 INFO     Number of failures: 4
-2023-10-07 23:01:22 INFO     Number of errors: 8
-2023-10-07 23:01:22 INFO     Pass rate: 75.00%
-2023-10-07 23:01:22 INFO     Fail rate: 8.33%
-2023-10-07 23:01:22 INFO     Error rate: 16.67%
-2023-10-07 23:01:22 INFO     List of measurement results that failed: Josh's Signal Path 1 | Frequency Response | RMS Level, Josh's Signal Path 3 | Acoustic Response | THD Ratio
-2023-10-07 23:01:22 INFO     List of measurement results that errored: Josh's Signal Path 2 | Maximum Output (CEA-2006) | RMS Level, Josh's Signal Path 2 | Maximum Output (CEA-2006) | THD+N Level, Josh's Signal Path 2 | Maximum Output (CEA-2006) | THD+N Ratio, Josh's Signal Path 2 | Maximum Output (CEA-2006) | Generator Level
-2023-10-07 23:01:23 WARNING  DC Level does not have xy values.
-2023-10-07 23:01:23 WARNING  RMS Level does not have xy values.
-2023-10-07 23:01:23 WARNING  RMS Level does not have xy values.
-2023-10-07 23:01:23 WARNING  THD+N Level does not have xy values.
-2023-10-07 23:01:23 WARNING  THD+N Ratio does not have xy values.
-2023-10-07 23:01:23 WARNING  Generator Level does not have xy values.
-2023-10-07 23:01:23 WARNING  RMS Level does not have xy values.
-2023-10-07 23:01:23 WARNING  RMS Level does not have xy values.
-2023-10-07 23:01:23 WARNING  DC Level does not have xy values.
-2023-10-07 23:01:23 WARNING  RMS Level does not have xy values.
-2023-10-07 23:01:23 WARNING  Gain does not have xy values.
-2023-10-07 23:01:23 WARNING  Peak Level does not have xy values.
-2023-10-07 23:01:23 WARNING  RMS Level does not have xy values.
-2023-10-07 23:01:23 INFO     Exported data to Bluey-START.xlsx.
-2023-10-07 23:01:23 WARNING  DC Level does not have xy values.
-2023-10-07 23:01:23 WARNING  RMS Level does not have xy values.
-2023-10-07 23:01:23 WARNING  RMS Level does not have xy values.
-2023-10-07 23:01:23 WARNING  RMS Level does not have xy values.
-2023-10-07 23:01:23 WARNING  DC Level does not have xy values.
-2023-10-07 23:01:23 WARNING  RMS Level does not have xy values.
-2023-10-07 23:01:23 WARNING  Gain does not have xy values.
-2023-10-07 23:01:23 WARNING  Peak Level does not have xy values.
-2023-10-07 23:01:23 WARNING  RMS Level does not have xy values.
-2023-10-07 23:01:24 INFO     Exported data to Bluey-START_PASS.xlsx.
-2023-10-07 23:01:24 INFO     Exported data to Bluey-START_FAIL.xlsx.
-2023-10-07 23:01:24 WARNING  RMS Level does not have xy values.
-2023-10-07 23:01:24 WARNING  THD+N Level does not have xy values.
-2023-10-07 23:01:24 WARNING  THD+N Ratio does not have xy values.
-2023-10-07 23:01:24 WARNING  Generator Level does not have xy values.
-2023-10-07 23:01:24 INFO     Exported data to Bluey-START_ERRORS.xlsx.
-2023-10-07 23:01:48 WARNING  DC Level does not have xy values.
-2023-10-07 23:01:48 WARNING  RMS Level does not have xy values.
-2023-10-07 23:01:48 WARNING  RMS Level does not have xy values.
-2023-10-07 23:01:48 WARNING  RMS Level does not have xy values.
-2023-10-07 23:01:48 WARNING  DC Level does not have xy values.
-2023-10-07 23:01:48 WARNING  RMS Level does not have xy values.
-2023-10-07 23:01:48 WARNING  Gain does not have xy values.
-2023-10-07 23:01:48 WARNING  Peak Level does not have xy values.
-2023-10-07 23:01:48 WARNING  RMS Level does not have xy values.
-2023-10-07 23:01:49 INFO     Exported data to Bluey-START_PASS.xlsx.
+2023-11-03 15:43:32 INFO     Processing Signal Path: Josh's Signal Path 1
+2023-11-03 15:43:32 INFO     Checked Signal Path: Josh's Signal Path 1
+2023-11-03 15:43:32 INFO     	Checked Measurement: Frequency Response
+2023-11-03 15:43:32 INFO     Josh's Signal Path 1 | Frequency Response | RMS Level -> FAIL
+2023-11-03 15:43:32 INFO     	Checked Measurement: Second Frequency Response
+2023-11-03 15:43:32 INFO     Josh's Signal Path 1 | Second Frequency Response | RMS Level -> PASS
+2023-11-03 15:43:32 INFO     	Checked Measurement: DC Level
+2023-11-03 15:43:32 INFO     Josh's Signal Path 1 | DC Level | DC Level -> PASS
+2023-11-03 15:43:32 INFO     Added a new signal path to checked_signal_paths. Total items now: 1
+2023-11-03 15:43:32 INFO     Processing Signal Path: Josh's Signal Path 2
+2023-11-03 15:43:32 INFO     Checked Signal Path: Josh's Signal Path 2
+2023-11-03 15:43:32 INFO     	Checked Measurement: Signal Path Setup
+2023-11-03 15:43:32 INFO     Josh's Signal Path 2 | Signal Path Setup | RMS Level -> PASS
+2023-11-03 15:43:32 INFO     	Checked Measurement: Frequency Response
+2023-11-03 15:43:32 INFO     Josh's Signal Path 2 | Frequency Response | RMS Level -> PASS
+2023-11-03 15:43:32 INFO     Josh's Signal Path 2 | Frequency Response | Gain -> PASS
+2023-11-03 15:43:32 INFO     Josh's Signal Path 2 | Frequency Response | Relative Level (1.00000 kHz) -> PASS
+2023-11-03 15:43:32 INFO     Added a new signal path to checked_signal_paths. Total items now: 2
+2023-11-03 15:43:32 INFO     Processing Signal Path: Josh's Signal Path 3
+2023-11-03 15:43:32 INFO     Checked Signal Path: Josh's Signal Path 3
+2023-11-03 15:43:32 INFO     	Checked Measurement: Signal Path Setup
+2023-11-03 15:43:32 INFO     Josh's Signal Path 3 | Signal Path Setup | RMS Level -> PASS
+2023-11-03 15:43:32 INFO     	Checked Measurement: Acoustic Response
+2023-11-03 15:43:32 INFO     Josh's Signal Path 3 | Acoustic Response | Smoothed Response -> PASS
+2023-11-03 15:43:32 INFO     Josh's Signal Path 3 | Acoustic Response | Phase -> PASS
+2023-11-03 15:43:32 INFO     Josh's Signal Path 3 | Acoustic Response | THD Ratio -> FAIL
+2023-11-03 15:43:32 INFO     Added a new signal path to checked_signal_paths. Total items now: 3
+2023-11-03 15:43:32 INFO     Processing Signal Path: Josh's Signal Path 4
+2023-11-03 15:43:32 INFO     Processing Signal Path: Josh's Signal Path 5
+2023-11-03 15:43:32 INFO     Processing Signal Path: Signal Path1
+2023-11-03 15:43:32 INFO     Added a new item to checkedSignalPathsList. Total items now: 1
+2023-11-03 15:43:32 INFO     Added a new item to checkedSignalPathsList. Total items now: 2
+2023-11-03 15:43:33 INFO     Added a new item to checkedSignalPathsList. Total items now: 3
+2023-11-03 15:43:33 INFO     Total test results: 11
+2023-11-03 15:43:33 INFO     Number of failures: 2
+2023-11-03 15:43:33 INFO     Number of errors: 0
+2023-11-03 15:43:33 INFO     Pass rate: 81.82%
+2023-11-03 15:43:33 INFO     Fail rate: 18.18%
+2023-11-03 15:43:33 INFO     Error rate: 0.00%
+2023-11-03 15:43:33 INFO     List of measurement results that failed: Josh's Signal Path 1 | Frequency Response | RMS Level, Josh's Signal Path 3 | Acoustic Response | THD Ratio
+2023-11-03 15:43:33 INFO     List of measurement results that errored: 
+2023-11-03 15:43:48 WARNING  DC Level does not have xy values.
+2023-11-03 15:43:48 WARNING  RMS Level does not have xy values.
+2023-11-03 15:43:48 WARNING  RMS Level does not have xy values.
+2023-11-03 15:43:48 INFO     Exported data to bsdsf.xlsx.
